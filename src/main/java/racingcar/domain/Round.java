@@ -1,20 +1,17 @@
 package racingcar.domain;
 
 public class Round {
-    private static final int MIN_ROUND = 0;
     private final int round;
 
     private Round(int round) {
         this.round = round;
     }
 
-    public static Round from(int round) {
-        roundValidation(round);
-        return new Round(round);
-    }
-
-    private static void roundValidation(int round) {
-        if (round <= MIN_ROUND) {
+    public static Round from(String inputRound) {
+        try {
+            int round = Integer.parseInt(inputRound);
+            return new Round(round);
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException();
         }
     }

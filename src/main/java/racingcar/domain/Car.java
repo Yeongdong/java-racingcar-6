@@ -1,46 +1,38 @@
 package racingcar.domain;
 
-import racingcar.utils.GameRules;
+import camp.nextstep.edu.missionutils.Randoms;
 
 public class Car {
-    private final String name;
+    private final String carName;
     private int position;
 
-    private Car(String name) {
-        this.name = name;
-        this.position = GameRules.START_POSITION.getValue();
+    private Car(String carName) {
+        this.carName = carName;
     }
 
-    public static Car from(String name) {
-        isNotNull(name);
-        isOverSize(name);
-        return new Car(name);
+    public static Car from(String carName) {
+        validateLength(carName);
+        validateNotNull(carName);
+        return new Car(carName);
     }
 
-    private static void isNotNull(final String carName) {
-        if (carName.trim().isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private static void isOverSize(final String carName) {
-        if (carName.length() > GameRules.NAME_LIMIT.getValue()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void move(MovableStrategy movableStrategy) {
-        if (movableStrategy.isMove()) {
+    public void move() {
+        if (Randoms.pickNumberInRange(GameRules.RANDOM_NUMBER_START.getValue(), GameRules.RANDOM_NUMBER_END.getValue()) >= GameRules.MOVE_CONDITION.getValue())
             this.position++;
-        }
     }
 
-    public boolean isTopPosition(int topPosition) {
-        return this.position == topPosition;
+    private static void validateLength(String carName) {
+        if (carName.length() > GameRules.NAME_LENGTH_LIMIT.getValue())
+            throw new IllegalArgumentException();
     }
 
-    public String getName() {
-        return name;
+    private static void validateNotNull(String carName) {
+        if (carName.isEmpty())
+            throw new IllegalArgumentException();
+    }
+
+    public String getCarName() {
+        return carName;
     }
 
     public int getPosition() {

@@ -1,11 +1,10 @@
-package racingcar.utils;
+package racingcar.domain;
 
 public enum GameRules {
-    START_RANGE(0),
-    END_RANGE(9),
-    START_POSITION(0),
-    GO_CONDITION(4),
-    NAME_LIMIT(5);
+    NAME_LENGTH_LIMIT(5),
+    MOVE_CONDITION(4),
+    RANDOM_NUMBER_START(0),
+    RANDOM_NUMBER_END(9);
 
     private final int value;
 

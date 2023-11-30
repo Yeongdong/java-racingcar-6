@@ -1,40 +1,47 @@
 package racingcar.domain;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class Cars {
-    private final List<Car> cars;
+    private static final String NAME_SPLITTER = ",";
+    private static final String WINNER_DELIMITER = ", ";
+    private final List<Car> carList;
 
-    private Cars(final List<Car> cars) {
-        this.cars = cars;
+    private Cars(List<Car> carList) {
+        this.carList = carList;
     }
 
-    public static Cars from(List<String> carNames) {
-        return new Cars(createCars(carNames));
+    public static Cars from(String carNames) {
+        List<Car> carList = Arrays.stream(carNames.split(NAME_SPLITTER))
+                .map(Car::from)
+                .toList();
+        return new Cars(carList);
     }
 
-    private static List<Car> createCars(List<String> carNames) {
-        List<Car> cars = new ArrayList<>();
-        for (String carName : carNames) {
-            cars.add(Car.from(carName));
-        }
-        return cars;
-    }
-
-    public void startRace(MovableStrategy movableStrategy) {
-        for (Car car : cars) {
-            car.move(movableStrategy);
+    public void startRace() {
+        for (Car car : carList) {
+            car.move();
         }
     }
 
-    public Stream<Car> stream() {
-        return cars.stream();
+    public String findWinners() {
+        return carList.stream()
+                .filter(car -> car.getPosition() == findFirstCar())
+                .map(Car::getCarName)
+                .collect(Collectors.joining(WINNER_DELIMITER));
     }
 
-    public List<Car> getCars() {
-        return Collections.unmodifiableList(cars);
+    private int findFirstCar() {
+        int maxPosition = Integer.MIN_VALUE;
+        for (Car car : carList) {
+            maxPosition = Math.max(maxPosition, car.getPosition());
+        }
+        return maxPosition;
+    }
+
+    public List<Car> getCarList() {
+        return carList;
     }
 }
